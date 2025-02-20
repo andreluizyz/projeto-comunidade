@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1>Faça Login ou Crie sua Conta para Continuar</h1>
+        <div class="row">
+            <div class="col">
+            <form method="POST" action="" class="border p-4 mt-2">
+                <legend>Login</legend>
+                <fieldset>
+                <div class="form-group">
+                    {{form_login.email.label (class="form-control-label")}}
+                    {{form_login.email (class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form_login.password.label (class="form-control-label")}}
+                    {{form_login.password (class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form_login.remind_data.label (class="form-check-label")}}
+                    {{form_login.remind_data (class="form-check-input")}}
+                </div>
+                </fieldset>
+                    {{form_login.submit_login (class="btn btn-primary mt-2")}}
+            </form>
+            </div>
+
+            <div class="col">
+            <form method="POST" action="" class="border p-4 mt-2">
+                <legend>Criar conta</legend>
+                <fieldset>
+                <div class="form-group">
+                    {{form_create_account.name.label (class="form-control-label")}}
+                    {{form_create_account.name (class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form_create_account.email.label (class="form-control-label")}}
+                    {{form_create_account.email (class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form_create_account.password.label (class="form-control-label")}}
+                    {{form_create_account.password (class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form_create_account.confirm_password.label (class="form-control-label")}}
+                    {{form_create_account.confirm_password (class="form-control")}}
+                </div>
+                </fieldset>
+                    {{form_create_account.submit_create_account (class="btn btn-primary mt-2")}}
+            </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
