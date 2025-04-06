@@ -9,3 +9,5 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///comunidade.db'
 list_creators = ["Clarissa", "Lucas", "Marcos", "Ana", "Juliana", "Pedro", "Fernanda", "Roberto", "Carla", "Thiago"]
 
 database = SQLAlchemy(app)
+
+from comunidadeimpressionadora import routes
