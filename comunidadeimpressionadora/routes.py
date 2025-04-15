@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
-from comunidadeimpressionadora.forms import CreateAccount, Login
+from comunidadeimpressionadora.forms import CreateAccount, Login, FormEditProfile
 from comunidadeimpressionadora import app, database, bycrypt
 from comunidadeimpressionadora.models import Usuario
 from flask_login import login_user, logout_user, current_user, login_required
@@ -57,9 +57,17 @@ def logout():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    profile_picture = url_for('static', filename='media/{}'.format(current_user.profile_picture))
+    return render_template('profile.html', profile_picture=profile_picture)
 
 @app.route('/post/create')
 @login_required
 def post_create():
     return render_template('post_create.html')
+
+@app.route('/profile/edit',methods=['GET', 'POST'])
+@login_required
+def profile_edit():
+    form = FormEditProfile()
+    profile_picture = url_for('static', filename='media/{}'.format(current_user.profile_picture))
+    return render_template('edit_profile.html', profile_picture=profile_picture, form=form)
