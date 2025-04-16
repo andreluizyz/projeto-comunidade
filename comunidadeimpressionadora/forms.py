@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from comunidadeimpressionadora.models import Usuario
+from flask_login import current_user
 
 class CreateAccount(FlaskForm):
     username = StringField('Nome de Usuário', validators=[DataRequired()])
@@ -25,4 +27,11 @@ class Login(FlaskForm):
 class FormEditProfile(FlaskForm):
     username = StringField('Nome de Usuário', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    profile_picture = FileField('Edit Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit_edit_profile = SubmitField('Edit Profile')
+
+    def validate_email(self, email):
+        if current_user.email != email.data:
+            user = Usuario.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('Email já cadastrado. Cadastre-se com outro e-mail para continuar.')

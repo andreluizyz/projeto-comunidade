@@ -69,5 +69,16 @@ def post_create():
 @login_required
 def profile_edit():
     form = FormEditProfile()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        database.session.commit()
+        flash("Dados atualizados com sucesso", "alert-success")
+        return redirect(url_for('profile'))
+    
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+        
     profile_picture = url_for('static', filename='media/{}'.format(current_user.profile_picture))
     return render_template('edit_profile.html', profile_picture=profile_picture, form=form)
