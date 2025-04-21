@@ -3,6 +3,9 @@ from comunidadeimpressionadora.forms import CreateAccount, Login, FormEditProfil
 from comunidadeimpressionadora import app, database, bycrypt
 from comunidadeimpressionadora.models import Usuario
 from flask_login import login_user, logout_user, current_user, login_required
+import secrets
+import os
+from PIL import Image
 
 list_creators= ["Clarissa", "Lucas", "Marcos", "Ana", "Juliana", "Pedro", "Fernanda", "Roberto", "Carla", "Thiago"]
 
@@ -57,13 +60,25 @@ def logout():
 @app.route('/profile')
 @login_required
 def profile():
-    profile_picture = url_for('static', filename='media/{}'.format(current_user.profile_picture))
+    profile_picture = url_for('static', filename='media-profile/{}'.format(current_user.profile_picture))
     return render_template('profile.html', profile_picture=profile_picture)
 
 @app.route('/post/create')
 @login_required
 def post_create():
     return render_template('post_create.html')
+
+def image_save(image):
+    code = secrets.token_hex(8)
+    name, extension = os.path.splitext(image.filename)
+    file_name = name + code + extension
+    folder = os.path.join(app.root_path + '/static/media-profile/', file_name)
+    image_size = (200, 200)
+    image_shrink = Image.open(image)
+    image_shrink.thumbnail(image_size)
+    image_shrink.save(folder)
+
+    return file_name
 
 @app.route('/profile/edit',methods=['GET', 'POST'])
 @login_required
@@ -72,13 +87,18 @@ def profile_edit():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
+        if form.profile_picture.data:
+            name_image = image_save(form.profile_picture.data)
+            current_user.profile_picture = name_image
         database.session.commit()
         flash("Dados atualizados com sucesso", "alert-success")
         return redirect(url_for('profile'))
+    
+
     
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
         
-    profile_picture = url_for('static', filename='media/{}'.format(current_user.profile_picture))
+    profile_picture = url_for('static', filename='media-profile/{}'.format(current_user.profile_picture))
     return render_template('edit_profile.html', profile_picture=profile_picture, form=form)
