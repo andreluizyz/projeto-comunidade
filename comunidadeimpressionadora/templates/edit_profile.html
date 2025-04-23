@@ -54,6 +54,23 @@
                 {% endif %}
             </div>
 
+            <hr>
+
+            <p>Cursos</p>
+
+            {% for field in form %}
+                {% if 'course_' in field.name %}
+
+                <div class="form-group">
+                    {{field (class="form-check-input")}}
+                    {{field.label (class="form-check-label")}}
+                </div>
+
+                {% endif %}
+            {% endfor %}
+
+            
+
             </fieldset>
                 {{form.submit_edit_profile (class="btn btn-primary mt-2")}}
         </form>

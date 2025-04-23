@@ -80,6 +80,9 @@ def image_save(image):
 
     return file_name
 
+# def refresh_courses(form):
+
+
 @app.route('/profile/edit',methods=['GET', 'POST'])
 @login_required
 def profile_edit():
@@ -90,12 +93,12 @@ def profile_edit():
         if form.profile_picture.data:
             name_image = image_save(form.profile_picture.data)
             current_user.profile_picture = name_image
+        # current_user.cousers = refresh_courses(form)
         database.session.commit()
         flash("Dados atualizados com sucesso", "alert-success")
         return redirect(url_for('profile'))
     
 
-    
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email

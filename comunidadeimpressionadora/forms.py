@@ -28,6 +28,11 @@ class FormEditProfile(FlaskForm):
     username = StringField('Nome de Usuário', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     profile_picture = FileField('Edit Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    course_python = BooleanField('Python com a Lê')
+    course_sql = BooleanField('SQL com o pai')
+    course_html = BooleanField('Front Ender Impressionador')
+    course_design = BooleanField('Van Gogh Impressionador')
+    course_github = BooleanField('Git Impressionador')
     submit_edit_profile = SubmitField('Edit Profile')
 
     def validate_email(self, email):
