@@ -35,7 +35,11 @@
             <div class="d-flex flex-column">
 
                 <span class="followers">Coursers</span>
-                <span class="number2">0</span>
+                {% if 'Não informado' in current_user.cousers %} 
+                    <span class="number2">0</span>
+                {% else %}
+                    <span class="number2">{{ current_user.cousers.count(';') + 1 }}</span>
+                {% endif %}
                 
             </div>
 
@@ -50,10 +54,20 @@
         </div>   
 
         </div>   
-
+        
     </div>
     
- </div>
+    </div>
+<div class="row justify-content-center">
+    <div class="col col-4" style="text-align: center;">
+        {% for course in current_user.cousers.split(';') %}
+            <button type="button" class="btn btn-success disabled">{{course}}</button>
+        {% endfor %}
+
+    </div>
+</div>
+
+
 
 {% block form_profile_edit %}
 
