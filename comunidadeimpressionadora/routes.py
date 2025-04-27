@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
-from comunidadeimpressionadora.forms import CreateAccount, Login, FormEditProfile
+from comunidadeimpressionadora.forms import CreateAccount, Login, FormEditProfile, PostForm
 from comunidadeimpressionadora import app, database, bycrypt
-from comunidadeimpressionadora.models import Usuario
+from comunidadeimpressionadora.models import Usuario, Post
 from flask_login import login_user, logout_user, current_user, login_required
 import secrets
 import os
@@ -62,10 +62,19 @@ def profile():
     profile_picture = url_for('static', filename='media-profile/{}'.format(current_user.profile_picture))
     return render_template('profile.html', profile_picture=profile_picture)
 
-@app.route('/post/create')
+@app.route('/post/create', methods=['GET', 'POST'])
 @login_required
 def post_create():
-    return render_template('post_create.html')
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, body=form.body.data, id_user=current_user.id)
+        database.session.add(post)
+        database.session.commit()
+        flash("Post criado com sucesso", "alert-success")
+        return redirect(url_for('home'))
+    return render_template('post_create.html', form=form)
+
+
 
 def image_save(image):
     code = secrets.token_hex(8)
