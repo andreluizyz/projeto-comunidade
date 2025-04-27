@@ -7,8 +7,6 @@ import secrets
 import os
 from PIL import Image
 
-list_creators= ["Clarissa", "Lucas", "Marcos", "Ana", "Juliana", "Pedro", "Fernanda", "Roberto", "Carla", "Thiago"]
-
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -16,7 +14,8 @@ def home():
 @app.route('/users')
 @login_required
 def users():
-    return render_template('users.html', list_creators=list_creators)
+    list_users = Usuario.query.all()
+    return render_template('users.html', list_users=list_users)
 
 @app.route('/entre-em-contato')
 def contact():

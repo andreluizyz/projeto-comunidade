@@ -4,14 +4,61 @@
 
 {% block body %}
 <h1>Creators</h1>
-{% if list_creators %}
-{% for creator in list_creators %}
 
-<p>{{creator}} - Ativo</p>
-<hr>
+{% for user in list_users%}
+
+<div class="card p-3">
+
+    <div class="d-flex align-items-center">
+
+    <div class="image me-3">
+        <img src="{{ url_for('static', filename='media-profile/{}'.format(user.profile_picture)) }}" class="rounded" width="155" >
+    </div>
+
+    <div class="ml-3 w-100">
+        
+       <h4 class="mb-0 mt-0">{{ user.username }}</h4>
+       <span>{{ user.email }}</span>
+
+       <div class="p-2 mt-2 d-flex justify-content-between rounded stats">
+
+        <div class="d-flex flex-column">
+
+            <span class="articles">Posts</span>
+            <span class="number1">0</span>
+            
+        </div>
+
+        <div class="d-flex flex-column">
+
+            <span class="followers">Coursers</span>
+            {% if 'Não informado' in user.cousers %} 
+                <span class="number2">0</span>
+            {% else %}
+                <span class="number2">{{ user.cousers.count(';') + 1 }}</span>
+            {% endif %}
+            
+        </div>
+
+       </div>
+
+    </div>   
+
+    </div>   
+    
+</div>
+
+<div class="row justify-content-center">
+    <div class="col col-4" style="text-align: center;">
+        {% for course in user.cousers.split(';') %}
+            <button type="button" class="btn btn-success disabled">{{course}}</button>
+        {% endfor %}
+
+    </div>
+</div>
+
+
 {%endfor%}
-{% else %}
-<p>Não há criadores cadastrados</p>
-{% endif %}
+
 
 {% endblock %}
