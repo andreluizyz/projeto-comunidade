@@ -97,7 +97,28 @@ def refresh_courses(form):
                 list_courses.append(camp.label.text)
     return ';'.join(list_courses)
 
-@app.route('/profile/edit',methods=['GET', 'POST'])
+
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+def show_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.author:
+        form = PostForm()
+        if request.method == 'GET':
+            form.title.data = post.title
+            form.body.data = post.body
+        
+        if form.validate_on_submit():
+            post.title = form.title.data
+            post.body = form.body.data
+            database.session.commit()
+            flash("Post atualizado com sucesso", "alert-success")
+            return redirect(url_for('home'))
+    else:
+        form = None
+
+    return render_template('post.html', post=post, form=form)
+
+@app.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
 def profile_edit():
     form = FormEditProfile()
