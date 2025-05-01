@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, abort
 from comunidadeimpressionadora.forms import CreateAccount, Login, FormEditProfile, PostForm
 from comunidadeimpressionadora import app, database, bycrypt
 from comunidadeimpressionadora.models import Usuario, Post
@@ -99,6 +99,7 @@ def refresh_courses(form):
 
 
 @app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
 def show_post(post_id):
     post = Post.query.get(post_id)
     if current_user == post.author:
@@ -117,6 +118,19 @@ def show_post(post_id):
         form = None
 
     return render_template('post.html', post=post, form=form)
+
+@app.route('/post/<post_id>/excluir', methods=['GET', 'POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.author:
+        database.session.delete(post)
+        database.session.commit()
+        flash("Post excluído com sucesso", "alert-success")
+        return redirect(url_for('home'))
+    else:
+        abort(403)
+
 
 @app.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
