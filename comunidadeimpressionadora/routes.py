@@ -9,7 +9,8 @@ from PIL import Image
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    post = Post.query.order_by(Post.id.desc())
+    return render_template('home.html', posts=post)
 
 @app.route('/users')
 @login_required

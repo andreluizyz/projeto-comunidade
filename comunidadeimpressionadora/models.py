@@ -13,7 +13,7 @@ class Usuario(database.Model, UserMixin):
     email = database.Column(database.String(120), unique=True, nullable=False)
     password = database.Column(database.String(20), nullable=False)
     profile_picture = database.Column(database.String, default='default.jpg')
-    post = database.relationship('Post', backref='autor', lazy=True)
+    post = database.relationship('Post', backref='author', lazy=True)
     cousers = database.Column(database.String, nullable=False, default='Não informado')
 
 class Post(database.Model):
